@@ -1,0 +1,31 @@
+model:
+  type: bpnn
+  arch:
+  - 500
+  - 50
+  - 10
+training:
+  batch_size: 64
+  learning_rate: 0.035
+  epochs: 100000
+  patience: 5000
+  loss: Huber
+  optimizer: Rprop
+  scheduler: null
+data:
+  train_csv: ./input/20251216/train.csv
+  eval_csv: ./input/20251216/eval.csv
+runtime:
+  run_time: '20251221161319'
+  device: cpu
+paths:
+  model_save_dir: ./output/bpnn/20251221161319
+  result_save_dir: ./output/bpnn/20251221161319
+  model_save_path: ./output/bpnn/20251221161319/bpnn_500-50-10.pth
+evaluation:
+  metrics:
+    MAE: 20.485877990722656
+    MSE: 0.0006509112427011132
+    RMSE: 25.512962248651434
+    R2: 0.9999942779541016
+  eval_time: '20251221163552'

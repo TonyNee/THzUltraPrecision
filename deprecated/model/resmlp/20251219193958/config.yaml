@@ -1,0 +1,30 @@
+model:
+  type: resmlp
+  arch:
+  - 128
+  - 256
+  - 256
+  - 128
+  - 64
+training:
+  batch_size: 64
+  learning_rate: 1.0e-06
+  epochs: 2000
+  patience: 200
+data:
+  train_csv: ./data/20250928/THz_train_20250928.csv
+  eval_csv: ./data/20250928/THz_eval_20250928.csv
+runtime:
+  run_time: '20251219193958'
+  device: cpu
+paths:
+  model_save_dir: ./model/resmlp/20251219193958
+  result_save_dir: ./result/resmlp/20251219193958
+  model_save_path: ./model/resmlp/20251219193958/resmlp_128-256-256-128-64.pth
+evaluation:
+  metrics:
+    MAE: 26.478666305541992
+    MSE: 0.0010706887114793062
+    RMSE: 0.03272138003628983
+    R2: 0.9999790787696838
+  eval_time: '20251219194126'
