@@ -23,12 +23,10 @@ from model import MODEL_REGISTRY
 
 class Config:
     # 模型配置
-    # MODEL_TYPE = "resmlp"
-    # MODEL_ARCH = [128, 256, 256, 128, 64]
+    MODEL_TYPE = "resmlp"
+    MODEL_ARCH = [128, 256, 256, 128, 64]
     # MODEL_TYPE = "bpnn"
     # MODEL_ARCH = [500, 50, 10]
-    MODEL_TYPE = "demo"
-    MODEL_ARCH = [64, 128, 64]
     MODEL_CLASS = None
 
     # 输入路径
@@ -223,6 +221,11 @@ class Config:
             )
         elif cls.OPTIMIZER_TYPE == "Rprop":
             return optim.Rprop(
+                model.parameters(),
+                lr=cls.LEARNING_RATE
+            )
+        elif cls.OPTIMIZER_TYPE == "SGD":
+            return optim.SGD(
                 model.parameters(),
                 lr=cls.LEARNING_RATE
             )

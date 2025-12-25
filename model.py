@@ -20,12 +20,12 @@ def register_model(name):
 class ResMLP(nn.Module):
 
     DEFAULT_CONFIG = {
-        "batch_size": 64,
-        "learning_rate": 0.035,
-        "epochs": 100000,
+        "batch_size": 8,
+        "learning_rate": 0.001,
+        "epochs": 10000,
         "patience": 2000,
-        "loss": "Huber",
-        "optimizer": "Rprop",
+        "loss": "MSE",
+        "optimizer": "Adam",
         "scheduler": {
             "type": "CosineAnnealingLR",
             "T_max": "epochs"
@@ -115,3 +115,27 @@ class BPNN(nn.Module):
 
     def forward(self, x):
         return self.model(x)
+    
+
+# -------------------------------
+#   线性回归模型 LinearRegression
+# -------------------------------
+@register_model("linear")
+class LinearRegression(nn.Module):
+
+    DEFAULT_CONFIG = {
+        "batch_size": 64,
+        "learning_rate": 0.01,
+        "epochs": 100000,
+        "patience": 20000,
+        "loss": "MSE",
+        "optimizer": "Adam",
+        "scheduler": None,
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.linear = nn.Linear(1, 1)
+
+    def forward(self, x):
+        return self.linear(x)
