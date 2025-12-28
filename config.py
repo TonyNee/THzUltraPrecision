@@ -40,6 +40,8 @@ class Config:
     MODEL_SAVE_PATH = None
 
     # 训练超参数
+    K_FOLDS = 5
+    CV_SEED = 42
     BATCH_SIZE = None
     LEARNING_RATE = None
     EPOCHS = None

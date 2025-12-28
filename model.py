@@ -20,8 +20,8 @@ def register_model(name):
 class ResMLP(nn.Module):
 
     DEFAULT_CONFIG = {
-        "batch_size": 8,
-        "learning_rate": 0.001,
+        "batch_size": 32,
+        "learning_rate": 1e-7,
         "epochs": 10000,
         "patience": 2000,
         "loss": "MSE",
