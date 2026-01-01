@@ -1,0 +1,11 @@
+5-Fold CV Results
+============================================================
+Fold  1: Val Loss = 5.499542e-04, Best Epoch = 3609
+Fold  2: Val Loss = 7.150766e-04, Best Epoch = 4288
+Fold  3: Val Loss = 5.040763e-04, Best Epoch = 4588
+Fold  4: Val Loss = 6.812998e-04, Best Epoch = 3346
+Fold  5: Val Loss = 6.559840e-04, Best Epoch = 1277
+------------------------------------------------------------
+Mean Val Loss: 6.212782e-04
+Std:            8.053400e-05
+Avg Best Epoch: 3421

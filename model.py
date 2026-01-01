@@ -21,7 +21,7 @@ class ResMLP(nn.Module):
 
     DEFAULT_CONFIG = {
         "batch_size": 32,
-        "learning_rate": 1e-7,
+        "learning_rate": 2e-5,
         "epochs": 10000,
         "patience": 2000,
         "loss": "MSE",
