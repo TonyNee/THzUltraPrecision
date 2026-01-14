@@ -1,0 +1,35 @@
+model:
+  type: resmlp
+  arch:
+  - 128
+  - 256
+  - 256
+  - 128
+  - 64
+training:
+  batch_size: 32
+  learning_rate: 2.0e-05
+  epochs: 10000
+  patience: 2000
+  loss: MSE
+  optimizer: Adam
+  scheduler:
+    type: CosineAnnealingLR
+    T_max: 10000
+data:
+  train_csv: ./input/20260109/train.csv
+  eval_csv: ./input/20260109/eval.csv
+runtime:
+  run_time: '20260110195846'
+  device: cpu
+paths:
+  model_save_dir: ./output/resmlp/20260110195846
+  result_save_dir: ./output/resmlp/20260110195846
+  model_save_path: ./output/resmlp/20260110195846/resmlp_128-256-256-128-64.pth
+evaluation:
+  metrics:
+    MAE: 119.40637969970703
+    MSE: 0.019761839881539345
+    RMSE: 140.576811322278
+    R2: 0.9999991655349731
+  eval_time: '20260111160013'

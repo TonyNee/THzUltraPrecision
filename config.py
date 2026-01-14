@@ -16,9 +16,11 @@ Usage:
 import os
 import time
 import yaml
+import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
+import matplotlib.pyplot as plt
 from model import MODEL_REGISTRY
 
 class Config:
@@ -30,8 +32,8 @@ class Config:
     MODEL_CLASS = None
 
     # 输入路径
-    TRAIN_CSV = "./input/20251216/train.csv"
-    EVAL_CSV  = "./input/20251216/eval.csv"
+    TRAIN_CSV = "./input/20260113/train.csv"
+    EVAL_CSV  = "./input/20260113/eval.csv"
 
     # 输出路径
     RUN_TIME = None
@@ -248,4 +250,77 @@ class Config:
             )
         else:
             raise ValueError(f"Unknown scheduler: {sched_type}")
+
+class Utils:
+
+    @classmethod
+    # 标注两个范围的最大绝对值
+    def annotate_max_abs_by_range(cls, x_data, y_data, label, color_index=0):
+        boundary_freq = 747
+        colors = ['#1f77b4', '#ff7f0e']
+        color = colors[color_index]
         
+        # 将数据转换为numpy数组
+        x_array = np.array(x_data)
+        y_array = np.array(y_data)
+        
+        # 分割数据为两个范围
+        mask_low = x_array < boundary_freq
+        mask_high = x_array > boundary_freq
+        
+        x_low = x_array[mask_low]
+        y_low = y_array[mask_low]
+        x_high = x_array[mask_high]
+        y_high = y_array[mask_high]
+        
+        results = {}
+        
+        # 标注低频范围 (<747 GHz) 的最大绝对值
+        if len(y_low) > 0:
+            abs_y_low = np.abs(y_low)
+            max_abs_idx_low = np.argmax(abs_y_low)
+            max_abs_val_low = y_low[max_abs_idx_low]
+            max_abs_freq_low = x_low[max_abs_idx_low]
+            
+            # 统一使用星号(*)标记
+            plt.plot(max_abs_freq_low, max_abs_val_low, '*', color=color, markersize=14,
+                    markeredgewidth=1, markeredgecolor='black')
+            
+            # 添加标注，包含频率信息
+            plt.annotate(f'{abs(max_abs_val_low):.2f} MHz\n@ {max_abs_freq_low:.1f} GHz',
+                        xy=(max_abs_freq_low, max_abs_val_low),
+                        xytext=(-10, 15 if max_abs_val_low >= 0 else -25),
+                        textcoords='offset points',
+                        ha='right',
+                        va='bottom' if max_abs_val_low >= 0 else 'top',
+                        fontsize=10,
+                        color=color,
+                        bbox=dict(boxstyle='round,pad=0.2', facecolor='white', alpha=0.8))
+            
+            results['low'] = (abs(max_abs_val_low), max_abs_val_low, max_abs_freq_low)
+        
+        # 标注高频范围 (>747 GHz) 的最大绝对值
+        if len(y_high) > 0:
+            abs_y_high = np.abs(y_high)
+            max_abs_idx_high = np.argmax(abs_y_high)
+            max_abs_val_high = y_high[max_abs_idx_high]
+            max_abs_freq_high = x_high[max_abs_idx_high]
+            
+            # 统一使用星号(*)标记
+            plt.plot(max_abs_freq_high, max_abs_val_high, '*', color=color, markersize=14,
+                    markeredgewidth=1, markeredgecolor='black')
+            
+            # 添加标注，包含频率信息
+            plt.annotate(f'{abs(max_abs_val_high):.2f} MHz\n@ {max_abs_freq_high:.1f} GHz',
+                        xy=(max_abs_freq_high, max_abs_val_high),
+                        xytext=(10, 15 if max_abs_val_high >= 0 else -25),
+                        textcoords='offset points',
+                        ha='left',
+                        va='bottom' if max_abs_val_high >= 0 else 'top',
+                        fontsize=10,
+                        color=color,
+                        bbox=dict(boxstyle='round,pad=0.2', facecolor='white', alpha=0.8))
+            
+            results['high'] = (abs(max_abs_val_high), max_abs_val_high, max_abs_freq_high)
+        
+        return results
