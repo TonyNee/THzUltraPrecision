@@ -18,7 +18,7 @@ training:
     T_max: 10000
 data:
   train_csv: ./input/20260113/train.csv
-  eval_csv: ./input/20260113/eval_1000.csv
+  eval_csv: ./input/20260113/eval_200.csv
 runtime:
   run_time: '20260114025619'
   device: cpu
@@ -28,7 +28,7 @@ paths:
   model_save_path: ./output/resmlp/20260114025619/resmlp_128-256-256-128-64.pth
 evaluation:
   metrics:
-    MAE: 44.90586853027344
-    MSE: 0.003220481099560857
-    RMSE: 56.74928281098235
-  eval_time: '20260116164743'
+    MAE: 196.72909545898438
+    MSE: 0.04879936948418617
+    RMSE: 220.90579323364557
+  eval_time: '20260116164531'

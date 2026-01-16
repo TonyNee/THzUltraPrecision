@@ -122,7 +122,7 @@ plt.text(0.015, 0.30, info_text,
          verticalalignment='top',
          fontsize=10,
          bbox=dict(boxstyle='round', facecolor='white', alpha=0.9))
-plt.legend()
+plt.legend(loc='lower left')
 plt.tight_layout()
 plt.savefig(os.path.join(Config.RESULT_SAVE_DIR, save_name))
 plt.close()
