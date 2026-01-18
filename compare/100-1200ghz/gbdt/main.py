@@ -82,9 +82,13 @@ y_pred = model.predict(X_eval).reshape(-1, 1)
 meas_residuals = X_eval - y_eval        # 测量误差
 pred_residuals = y_pred - y_eval        # 预测后误差
 
-eval_mse = mean_squared_error(y_eval, y_pred)
-print(f"Eval MSE: {eval_mse:.6f}")
+mse = mean_squared_error(y_pred, y_eval)
+mae = np.mean(np.abs(pred_residuals)) * 1000  # 转换为 MHz
+rmse = np.sqrt(mse) * 1000  # 转换为 MHz
 
+print(f"Eval MAE: {mae:.4f} MHz")
+print(f"Eval MSE: {mse:.6f} GHz^2")
+print(f"Eval RMSE: {rmse:.4f} MHz")
 
 # ============================================================
 # 4. 频率残差对比图（MHz）

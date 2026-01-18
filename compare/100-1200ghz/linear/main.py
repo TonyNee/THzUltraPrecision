@@ -48,8 +48,12 @@ meas_residuals = X_eval - y_eval      # 校准前残差
 pred_residuals = y_pred - y_eval      # 校准后残差
 
 mse = mean_squared_error(y_pred, y_eval)
-print(f"Eval MSE: {mse:.6f}")
+mae = np.mean(np.abs(pred_residuals)) * 1000  # 转换为 MHz
+rmse = np.sqrt(mse) * 1000  # 转换为 MHz
 
+print(f"Eval MAE: {mae:.4f} MHz")
+print(f"Eval MSE: {mse:.6f} GHz^2")
+print(f"Eval RMSE: {rmse:.4f} MHz")
 
 # ============================================================
 # 图 1：2×2 分析图
