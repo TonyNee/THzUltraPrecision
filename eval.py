@@ -6,6 +6,7 @@ import argparse
 import matplotlib.pyplot as plt
 
 from config import Config, Utils
+from scipy.stats import gaussian_kde
 
 
 # ============================
@@ -50,12 +51,49 @@ x_true = X.cpu().numpy()
 meas_residuals = (x_true - y_true).flatten()
 pred_residuals = (y_pred - y_true).flatten()
 
+
+MAE_m = float(np.mean(np.abs(meas_residuals)) * 1000)      # MHz
+MSE_m = float(np.mean(meas_residuals ** 2))                # GHz^2
+RMSE_m = float(np.sqrt(MSE_m) * 1000)                   # MHz
+print("\n===== EVAL 初始指标 =====")
+print(f"MAE: {MAE_m:.2f} MHz")
+print(f"RMSE: {RMSE_m:.2f} MHz")
+
+
+
+# 绝对误差（MHz）
+abs_err_mhz = np.abs(pred_residuals) * 1000
+
+# 高分位误差（单次测量可靠性指标）
+E1sigma = float(np.percentile(abs_err_mhz, 68.25))
+E2sigma = float(np.percentile(abs_err_mhz, 95.45))
+E3sigma = float(np.percentile(abs_err_mhz, 99.73))
+
+
+E80 = float(np.percentile(abs_err_mhz, 80))
+E90 = float(np.percentile(abs_err_mhz, 90))
+E95 = float(np.percentile(abs_err_mhz, 95))
+E99 = float(np.percentile(abs_err_mhz, 99))
+
+
 MAE = float(np.mean(np.abs(pred_residuals)) * 1000)      # MHz
 MSE = float(np.mean(pred_residuals ** 2))                # GHz^2
 RMSE = float(np.sqrt(MSE) * 1000)                   # MHz
 R2 = float(1 - np.sum(pred_residuals ** 2) / np.sum((y_true - np.mean(y_true)) ** 2))
 
-metrics = {"MAE": MAE, "MSE": MSE, "RMSE": RMSE, "R2": R2}
+metrics = {
+    "MAE_MHz": MAE,
+    "RMSE_MHz": RMSE,
+    "MSE_GHz2": MSE,
+    "R2": R2,
+    "E1s_MHz": E1sigma,
+    "E2s_MHz": E2sigma,
+    "E3s_MHz": E3sigma,
+    "E80_MHz": E80,
+    "E90_MHz": E90,
+    "E95_MHz": E95,
+    "E99_MHz": E99
+}
 Config.update_yaml(model_dir=args.mdir, metrics_dict=metrics)
 
 print("\n===== ResMLP 评估结果 =====")
@@ -63,6 +101,13 @@ print(f"MAE: {MAE:.10f} MHz")
 print(f"MSE: {MSE:.10f} GHz^2")
 print(f"RMSE: {RMSE:.10f} MHz")
 print(f"R2: {R2:.10f}")
+print(f"E1sigma: {E1sigma:.4f} MHz")
+print(f"E2sigma: {E2sigma:.4f} MHz")
+print(f"E3sigma: {E3sigma:.4f} MHz")
+print(f"E80: {E80:.4f} MHz")
+print(f"E90: {E90:.4f} MHz")
+print(f"E95: {E95:.4f} MHz")
+print(f"E99: {E99:.4f} MHz")
 
 # ============================
 # 5. 保存 CSV
@@ -216,3 +261,78 @@ print(f"\n结果表格已保存至: {table_save_name}")
 
 '''
 
+# ============================
+# 8. 预测残差概率分布（PDF）
+# ============================
+
+# 残差（MHz）
+residual_mhz = pred_residuals * 1000
+
+# 统计量
+mu = np.mean(residual_mhz)
+sigma = np.std(residual_mhz, ddof=1)
+
+# x 轴范围
+x_min, x_max = np.percentile(residual_mhz, [0.5, 99.5])
+x_pdf = np.linspace(x_min, x_max, 1000)
+
+# 高斯 PDF
+gaussian_pdf = (
+    1 / (np.sqrt(2 * np.pi) * sigma)
+    * np.exp(-0.5 * ((x_pdf - mu) / sigma) ** 2)
+)
+
+# 绘图
+plt.figure(figsize=(8, 5))
+
+# 直方图（概率密度）
+plt.hist(
+    residual_mhz,
+    bins=80,
+    density=True,
+    alpha=0.6,
+    label="Prediction Residuals (PDF)"
+)
+
+# 高斯拟合曲线
+plt.plot(
+    x_pdf,
+    gaussian_pdf,
+    'r-',
+    linewidth=2,
+    label=f'Gaussian Fit ($\\mu$={mu:.2f}, $\\sigma$={sigma:.2f})'
+)
+
+# σ 标注线
+for k in [1, 2, 3]:
+    plt.axvline(mu + k * sigma, color='k', linestyle='--', alpha=0.6)
+    plt.axvline(mu - k * sigma, color='k', linestyle='--', alpha=0.6)
+
+# 3σ 注释
+plt.text(
+    mu + 3 * sigma,
+    plt.ylim()[1] * 0.85,
+    r'$3\sigma$',
+    ha='right',
+    va='top',
+    fontsize=10
+)
+
+# 标签
+plt.xlabel("Prediction Residual (MHz)")
+plt.ylabel("Probability Density")
+plt.title(f"{Config.MODEL_TYPE} Residual Distribution")
+
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+
+# 保存
+pdf_save_name = os.path.join(
+    Config.RESULT_SAVE_DIR,
+    f"residual_pdf_{model_name}.png"
+)
+plt.savefig(pdf_save_name, dpi=300)
+plt.close()
+
+print(f"\n残差概率分布图已保存至: {pdf_save_name}")

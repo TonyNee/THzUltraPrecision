@@ -23,7 +23,7 @@ class ResMLP(nn.Module):
         "batch_size": 32,
         "learning_rate": 2e-5,
         "epochs": 10000,
-        "patience": 2000,
+        "patience": 500,
         "loss": "MSE",
         "optimizer": "Adam",
         "scheduler": {
@@ -48,6 +48,19 @@ class ResMLP(nn.Module):
             nn.SiLU(),
             nn.Linear(64, 1)
         )
+        # self.net = nn.Sequential(
+        #     nn.Linear(1, 128),
+        #     nn.GELU(),
+        #     nn.Linear(128, 256),
+        #     nn.GELU(),
+        #     nn.Linear(256, 256),
+        #     nn.GELU(),
+        #     nn.Linear(256, 128),
+        #     nn.GELU(),
+        #     nn.Linear(128, 64),
+        #     nn.GELU(),
+        #     nn.Linear(64, 1)
+        # )
 
     def forward(self, x):
         # 残差学习：输出的是 ΔF，最后自动修正

@@ -23,13 +23,20 @@ runtime:
   run_time: '20251229144815'
   device: cpu
 paths:
-  model_save_dir: ./output/resmlp/20251229144815
-  result_save_dir: ./output/resmlp/20251229144815
-  model_save_path: ./output/resmlp/20251229144815/resmlp_128-256-256-128-64.pth
+  model_save_dir: ./output/resmlp/0-40ghz/20251229144815
+  result_save_dir: ./output/resmlp/0-40ghz/20251229144815
+  model_save_path: ./output/resmlp/0-40ghz/20251229144815/resmlp_128-256-256-128-64.pth
 evaluation:
   metrics:
-    MAE: 18.609577178955078
-    MSE: 0.0005352143198251724
-    RMSE: 23.13469947557505
+    MAE_MHz: 18.609577178955078
+    RMSE_MHz: 23.13469947557505
+    MSE_GHz2: 0.0005352143198251724
     R2: 0.9999952912330627
-  eval_time: '20260104222952'
+    E1s_MHz: 24.49018669128418
+    E2s_MHz: 40.778263092041016
+    E3s_MHz: 62.10837936401367
+    E80_MHz: 33.81023406982422
+    E90_MHz: 35.83259201049805
+    E95_MHz: 39.883846282958984
+    E99_MHz: 52.14350128173828
+  eval_time: '20260205155928'

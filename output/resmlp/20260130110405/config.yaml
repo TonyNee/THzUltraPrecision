@@ -1,0 +1,44 @@
+# 在20260113数据（100-1200 GHz）的基础上添加了40-100 GHz数据
+
+model:
+  type: resmlp
+  arch:
+  - 128
+  - 256
+  - 256
+  - 128
+  - 64
+training:
+  batch_size: 32
+  learning_rate: 2.0e-05
+  epochs: 10000
+  patience: 2000
+  loss: MSE
+  optimizer: Adam
+  scheduler:
+    type: CosineAnnealingLR
+    T_max: 10000
+data:
+  train_csv: ./input/20260130/train.csv
+  eval_csv: ./input/20260130/eval_0.csv
+runtime:
+  run_time: '20260130110405'
+  device: cpu
+paths:
+  model_save_dir: ./output/resmlp/20260130110405
+  result_save_dir: ./output/resmlp/20260130110405
+  model_save_path: ./output/resmlp/20260130110405/resmlp_128-256-256-128-64.pth
+evaluation:
+  metrics:
+    MAE_MHz: 59.929832458496094
+    RMSE_MHz: 76.68426158980122
+    MSE_GHz2: 0.005880475975573063
+    R2: 0.99998539686203
+    E1s_MHz: 77.94422149658203
+    E2s_MHz: 149.37570190429688
+    E3s_MHz: 201.7296600341797
+    E80_MHz: 96.39129638671875
+    E90_MHz: 128.02276611328125
+    E95_MHz: 147.0901336669922
+    E99_MHz: 198.10150146484375
+  eval_time: '20260130172106'

@@ -150,6 +150,8 @@ rmse = np.sqrt(mse) * 1000  # 转换为 MHz
 print(f"Eval MAE: {mae:.4f} MHz")
 print(f"Eval MSE: {mse:.6f} GHz^2")
 print(f"Eval RMSE: {rmse:.4f} MHz")
+maxae = np.max(np.abs(pred_residuals)) * 1000  # 转换为 MHz
+print(f"Eval MaxAE: {maxae:.4f} MHz")
 
 plt.text(
     0.05, 0.95,

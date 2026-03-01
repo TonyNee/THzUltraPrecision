@@ -78,7 +78,7 @@ df_out.to_csv(os.path.join(Config.RESULT_SAVE_DIR, f"data_predicted_{model_name}
 # ============================
 # 6. 绘制测量值和预测值的直方图
 # ============================
-true_value = 1000
+true_value = 200
 
 # 创建子图布局
 fig, axes = plt.subplots(1, 2, figsize=(16, 6))
