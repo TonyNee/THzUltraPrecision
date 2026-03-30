@@ -32,8 +32,8 @@ class Config:
     MODEL_CLASS = None
 
     # 输入路径
-    TRAIN_CSV = "./input/20260113/train.csv"
-    EVAL_CSV  = "./input/20260113/eval.csv"
+    TRAIN_CSV = "./input/scale/296/train.csv"
+    EVAL_CSV  = "./input/scale/296/eval.csv"
 
     # 输出路径
     RUN_TIME = None

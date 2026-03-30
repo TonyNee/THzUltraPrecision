@@ -72,11 +72,19 @@ model = search.best_estimator_
 # ============================================================
 y_pred = model.predict(X_eval).reshape(-1, 1)
 
-mse = mean_squared_error(y_pred, y_eval)
-print(f"Eval MSE: {mse:.6f}")
+meas_residuals = X_eval - y_eval      # 校准前残差
+pred_residuals = y_pred - y_eval      # 校准后残差
 
-meas_residuals = X_eval - y_eval      # f_meas - f_true
-pred_residuals = y_pred - y_eval      # f_pred - f_true
+mse = mean_squared_error(y_pred, y_eval)
+mae = np.mean(np.abs(pred_residuals)) * 1000  # 转换为 MHz
+rmse = np.sqrt(mse) * 1000  # 转换为 MHz
+
+print(f"Eval MAE: {mae:.4f} MHz")
+print(f"Eval MSE: {mse:.6f} GHz^2")
+print(f"Eval RMSE: {rmse:.4f} MHz")
+maxae = np.max(np.abs(pred_residuals)) * 1000  # 转换为 MHz
+print(f"Eval MaxAE: {maxae:.4f} MHz")
+
 
 
 x_freq = X_eval.squeeze()
