@@ -18,7 +18,7 @@ training:
     T_max: 10000
 data:
   train_csv: ./input/20260113/train.csv
-  eval_csv: ./input/ol/sysdata.csv
+  eval_csv: ./input/20260113/eval_200.csv
 runtime:
   run_time: '20260114025619'
   device: cpu
@@ -28,15 +28,7 @@ paths:
   model_save_path: ./output/resmlp/20260114025619/resmlp_128-256-256-128-64.pth
 evaluation:
   metrics:
-    MAE_MHz: 81.37315368652344
-    RMSE_MHz: 102.87906045884395
-    MSE_GHz2: 0.01058410108089447
-    R2: 0.9999998807907104
-    E1s_MHz: 104.5379638671875
-    E2s_MHz: 190.88133239746094
-    E3s_MHz: 322.5135498046875
-    E80_MHz: 124.0234375
-    E90_MHz: 157.1044921875
-    E95_MHz: 189.453125
-    E99_MHz: 294.7998046875
-  eval_time: '20260314223710'
+    MAE: 196.72909545898438
+    MSE: 0.04879936948418617
+    RMSE: 220.90579323364557
+  eval_time: '20260407174457'

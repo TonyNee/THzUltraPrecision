@@ -4,6 +4,7 @@ import numpy as np
 import torch
 import argparse
 import matplotlib.pyplot as plt
+import time
 
 from config import Config
 
@@ -38,8 +39,16 @@ model.eval()
 # ============================
 # 3. 预测
 # ============================
+start_time = time.perf_counter()
 with torch.no_grad():
     y_pred = model(X).cpu().numpy()
+end_time = time.perf_counter()
+total_time_ms = (end_time - start_time) * 1000  # 转换为毫秒
+avg_time_us = (end_time - start_time) / len(X) * 1e6  # 转换为微秒
+print("\n===== 推理时间 =====")
+print(f"总样本数: {len(X)}")
+print(f"总推理时间: {total_time_ms:.3f} ms")
+print(f"平均每样本: {avg_time_us:.3f} μs ({avg_time_us/1000:.5f} ms)")
 
 y_true = Y.cpu().numpy()
 x_true = X.cpu().numpy()
